@@ -40,11 +40,14 @@ let date:Date = dateString.swiftyDate() // this will work
 
 The beauty of this library is that it will also understand other formats, for example:
 _10.12.2017_
+
 _12:30_
+
 _12/25/2016_
 
 Or in combinations:
 _12/25/2016 3:45pm_
+
 _20.10.2018 23:10_
 
 
