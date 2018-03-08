@@ -39,17 +39,17 @@ let date:Date = dateString.swiftyDate() // this will work
 ## Examples
 
 The beauty of this library is that it will also understand other formats, for example:
-_10.12.2017_
-
-_12:30_
-
-_12/25/2016_
+```
+10.12.2017
+12:30
+12/25/2016
+```
 
 Or in combinations:
-_12/25/2016 3:45pm_
-
-_20.10.2018 23:10_
-
+```
+12/25/2016 3:45pm
+20.10.2018 23:10
+```
 
 ## Assumptions
 1. Humans are messy and unstructured. Dates are mostly entered because of humans. Consequently we are dealing with a mess and try to get the best of out of it.
