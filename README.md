@@ -19,7 +19,7 @@ let dateString = "2018-03-08T15:49:46.5+03:30"
 let dateFormatter = DateFormatter()
 dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
 dateFormatter.dateFormat = "YYYYMMdd'T'HHmmss'Z'"
-let date:Date = dateFormatter.string(from: dateString) // this will not work work.
+let date:Date = dateFormatter.string(from: dateString) // this will not work.
 ```
 
 With _SwiftyDates_ all you need to do is this:
