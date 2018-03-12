@@ -9,7 +9,7 @@
 import Foundation
 
 extension String {
-    func swiftyTime() -> TimeInterval {
+    public func swiftyTime() -> TimeInterval {
         var hour: Double = 0
         var minute: Double = 0
         var second: Double = 0
@@ -70,7 +70,12 @@ extension String {
         return Double((hour * 3600) + (minute * 60) + second - offset)
     }
     
-    func swiftyDate(calendar:Calendar = Calendar.current) -> Date {
+    public func swiftyDate(calendar:Calendar = Calendar.current) -> Date? {
+        // is this even a string we can work with?
+        if (self == "") {
+            return nil
+        }
+        
         var day: Int?
         var month: Int?
         var year: Int?
@@ -171,9 +176,13 @@ extension String {
         let components = DateComponents(calendar: calendar, year: year, month: month, day: day)
         return components.date!
     }
-    func swiftyDateTime(calendar: Calendar = Calendar.current, baseDate: Date = Date()) -> Date {
+    public func swiftyDateTime(calendar: Calendar = Calendar.current, baseDate: Date = Date()) -> Date? {
         var time: TimeInterval = 0
-        var date: Date
+        var date: Date?
+        
+        if (self == "") {
+            return nil
+        }
         
         // cleaning
         let cleanString = replacingOccurrences(of: " am", with: "am").replacingOccurrences(of: " pm", with: "pm")
@@ -200,6 +209,9 @@ extension String {
         else {
             date = swiftyDate()
         }
-        return date + time
+        if (date == nil) {
+            return nil
+        }
+        return date! + time
     }
 }

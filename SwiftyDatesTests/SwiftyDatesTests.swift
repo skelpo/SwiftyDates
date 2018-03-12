@@ -11,9 +11,9 @@ import XCTest
 
 struct TestCase {
     var input:String
-    var output:String
+    var output:String?
     
-    init(_ i: String, _ o: String) {
+    init(_ i: String, _ o: String?) {
         input = i
         output = o
     }
@@ -83,6 +83,7 @@ class SwiftyDatesTests: XCTestCase {
         timeTestCases.append(TestCase("10.10pm", "01/01/2018 22:10:00"))
         timeTestCases.append(TestCase("10.10 pm", "01/01/2018 22:10:00"))
         timeTestCases.append(TestCase("10am", "01/01/2018 10:00:00"))
+        timeTestCases.append(TestCase("", nil))
         
         datetimeTestCases.append(TestCase("10/12/2018 10am", "10/12/2018 10:00:00"))
         datetimeTestCases.append(TestCase("10/12/2018 10:30am", "10/12/2018 10:30:00"))
@@ -109,24 +110,43 @@ class SwiftyDatesTests: XCTestCase {
     func testIsoCases() {
         let dateFormatter = getDateFormatter()
         for tc in iso8601TestCases {
-            let formatedDate = dateFormatter.string(from: tc.input.swiftyDateTime())
-            XCTAssertEqual(formatedDate, tc.output)
+            let date:Date? = tc.input.swiftyDateTime()
+            if (date == nil) {
+                XCTAssertNil(tc.output)
+            }
+            else {
+                let formatedDate = dateFormatter.string(from: date!)
+                XCTAssertEqual(formatedDate, tc.output)
+            }
+            
         }
     }
     
     func testDateCases() {
         let dateFormatter = getDateFormatter()
         for tc in dateTestCases {
-            let formatedDate = dateFormatter.string(from: tc.input.swiftyDateTime())
-            XCTAssertEqual(formatedDate, tc.output)
+            let date:Date? = tc.input.swiftyDateTime()
+            if (date == nil) {
+                XCTAssertNil(tc.output)
+            }
+            else {
+                let formatedDate = dateFormatter.string(from: date!)
+                XCTAssertEqual(formatedDate, tc.output)
+            }
         }
     }
     
     func testDateTimeCases() {
         let dateFormatter = getDateFormatter()
         for tc in datetimeTestCases {
-            let formatedDate = dateFormatter.string(from: tc.input.swiftyDateTime())
-            XCTAssertEqual(formatedDate, tc.output)
+            let date:Date? = tc.input.swiftyDateTime()
+            if (date == nil) {
+                XCTAssertNil(tc.output)
+            }
+            else {
+                let formatedDate = dateFormatter.string(from: date!)
+                XCTAssertEqual(formatedDate, tc.output)
+            }
         }
     }
     
@@ -136,8 +156,14 @@ class SwiftyDatesTests: XCTestCase {
         
         
         for tc in timeTestCases {
-            let formatedDate = dateFormatter.string(from: tc.input.swiftyDateTime(calendar: Calendar.current, baseDate: testDate))
-            XCTAssertEqual(formatedDate, tc.output)
+            let date:Date? = tc.input.swiftyDateTime(calendar: Calendar.current, baseDate: testDate)
+            if (date == nil) {
+                XCTAssertNil(tc.output)
+            }
+            else {
+                let formatedDate = dateFormatter.string(from: date!)
+                XCTAssertEqual(formatedDate, tc.output)
+            }
         }
     }
     

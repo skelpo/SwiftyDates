@@ -10,7 +10,7 @@ let dateString = "2018-03-08T15:49:46Z"
 let dateFormatter = DateFormatter()
 dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
 dateFormatter.dateFormat = "YYYYMMdd'T'HHmmss'Z'"
-let date:Date = dateFormatter.string(from: dateString) // this will work.
+let date:Date? = dateFormatter.string(from: dateString) // this will work.
 ```
 So far so good. Now, if we instead get another date, say:  `2018-03-08T15:49:46.5+03:30` Now Swift will throw you an exception because the specified format `YYYYMMdd'T'HHmmss'Z'`does not fit anymore.
 
@@ -25,7 +25,7 @@ let date:Date = dateFormatter.string(from: dateString) // this will not work wor
 With _SwiftyDates_ all you need to do is this:
 ```swift
 let dateString = "2018-03-08T15:49:46Z"
-let date:Date = dateString.swiftyDateTime() // this will work
+let date:Date? = dateString.swiftyDateTime() // this will work
 ```
 
 ## Dates
@@ -57,6 +57,7 @@ Or in combinations:
 2. Years are always given in 4 digits or in combination with months and days
 3. Time without dates is an number in seconds from the beginning of the day
 4. Dates without times have the time 00:00:00 (hh-mm-ss)
+5. We are not throwing exceptions, if a date/time does not work _nil_ is returned.
 
 ## Limitations / Todo
 1. No support for ordinal dates
