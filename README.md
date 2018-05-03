@@ -76,3 +76,6 @@ Or in combinations:
 1. No support for ordinal dates
 2. No support for week days
 3. No support for text dates ("November 2nd, 1991")
+
+## Performance
+First initial tests have shown that _SwiftyDates_ is about half as fast as DateFormatter. Considering the added functionality and flexibility it seems like a fair trade off. More performance tests should be performed and the code further optimized though.

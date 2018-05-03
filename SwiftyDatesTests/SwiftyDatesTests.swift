@@ -174,6 +174,39 @@ class SwiftyDatesTests: XCTestCase {
         }
     }
     
+    func testManualPerformance() {
+        let startTime = CFAbsoluteTimeGetCurrent()
+        let cycles = 10000
+        let dateString = "2018-03-08T15:49:46"
+        
+        for _ in 1...cycles {
+            dateString.swiftyDateTime()
+        }
+        let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
+        print("Time elapsed for \(cycles) cycles: \(timeElapsed) s.")
+        let perCall = timeElapsed/Double(cycles)
+        print("That is: \(perCall) s for one swiftyDateTime() call.")
+        
+        print("Comparing that to the DateFormatter...")
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        formatter.calendar = Calendar(identifier: .iso8601)
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        
+        let startTime2 = CFAbsoluteTimeGetCurrent()
+        for _ in 1...cycles {
+            formatter.date(from: dateString)
+        }
+        let timeElapsed2 = CFAbsoluteTimeGetCurrent() - startTime2
+        print("Time elapsed for \(cycles) cycles: \(timeElapsed2) s.")
+        let perCall2 = timeElapsed2/Double(cycles)
+        print("That is: \(perCall2) s for one DateFormatter() call.")
+        let faster = perCall-perCall2
+        print("DateFormatter is \(faster) fast than SwiftyDates.")
+        
+    }
+    
     func testTimePerformance() {
         self.measure {
             "2018-03-08".swiftyDate()
