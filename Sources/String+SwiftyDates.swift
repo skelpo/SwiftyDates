@@ -13,45 +13,29 @@ extension String {
         var hour: Double = 0
         var minute: Double = 0
         var second: Double = 0
-        var pm: Bool = false
+        let pm: Bool = self.contains("pm")
         var offset: Double = 0
-        if (contains("pm")) {
-            pm = true
-        }
+
         var cleanedTime = replacingOccurrences(of: "am", with: "").replacingOccurrences(of: "pm", with: "").replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "Z", with: "")
-        var sep: Character = ":"
-        if (contains(".") && !contains(":")) {
-            sep = "."
-        }
-        if (contains("+")) {
-            let timeParts:[String] = split(separator: "+").map { String($0) }
+        let sep: Character = self.contains(".") && !self.contains(":") ? "." : ":"
+
+        if (self.contains("-") || self.contains("+")) {
+            let sign: Double = self.contains("-") ? -1 : 1
+            
+            let timeParts:[String] = split(separator: sign == 1 ? "+" : "-").map(String.init)
             cleanedTime = timeParts[0]
             if (timeParts[1].contains(":")) {
-                let intervalParts = timeParts[1].split(separator: ":").map { Double($0)! }
-                offset = intervalParts[0]*3600 + intervalParts[1]*60
+                let intervalParts = timeParts[1].split(separator: ":").compactMap(Double.init)
+                offset = sign * (intervalParts[0]*3600 + intervalParts[1]*60)
                 if (intervalParts.count > 2) {
                     offset = offset + intervalParts[2]
                 }
             }
             else {
-                offset = Double(timeParts[1])!
+                offset = (Double(timeParts[1]) ?? 0) * sign
             }
         }
-        if (contains("-")) {
-            let timeParts:[String] = split(separator: "-").map { String($0)}
-            cleanedTime = timeParts[0]
-            if (timeParts[1].contains(":")) {
-                let intervalParts = timeParts[1].split(separator: ":").map { Double($0)!}
-                offset = 0 - intervalParts[0]*3600 - intervalParts[1]*60
-                if (intervalParts.count > 2) {
-                    offset = offset + intervalParts[2]
-                }
-            }
-            else {
-                offset = Double(timeParts[1])! * -1
-            }
-        }
-        let parts:[Double] = cleanedTime.split(separator: sep).map { Double($0)!}
+        let parts:[Double] = cleanedTime.split(separator: sep).compactMap(Double.init)
         if (parts.count > 0) {
             hour = parts[0]
         }
@@ -59,9 +43,6 @@ extension String {
             minute = parts[1]
         }
         if (parts.count > 2) {
-            second = parts[2]
-        }
-        if (parts.count > 3) {
             second = parts[2]
         }
         if (pm) {
