@@ -170,7 +170,7 @@ class SwiftyDatesTests: XCTestCase {
     func testDateTimePerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
-            "2018-03-08T15:49:46+00:00".swiftyDateTime()
+            _ = "2018-03-08T15:49:46+00:00".swiftyDateTime()
         }
     }
     
@@ -180,7 +180,7 @@ class SwiftyDatesTests: XCTestCase {
         let dateString = "2018-03-08T15:49:46"
         
         for _ in 1...cycles {
-            dateString.swiftyDateTime()
+            _ = dateString.swiftyDateTime()
         }
         let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
         print("Time elapsed for \(cycles) cycles: \(timeElapsed) s.")
@@ -209,7 +209,7 @@ class SwiftyDatesTests: XCTestCase {
     
     func testTimePerformance() {
         self.measure {
-            "2018-03-08".swiftyDate()
+            _ = "2018-03-08".swiftyDate()
         }
     }
     
