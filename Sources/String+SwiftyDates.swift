@@ -53,16 +53,14 @@ extension String {
     
     public func swiftyDate(calendar:Calendar = Calendar.current) -> Date? {
         // is this even a string we can work with?
-        if (self == "") {
-            return nil
-        }
+        if (self.count < 1) { return nil }
         
         var day: Int?
         var month: Int?
         var year: Int?
         // check for german dates ((d)d.(m)m.(yy)yy) or ((m)m.(yy)yy) or ((d)d.(m)m)
         if (contains(".")) { // most obvious sign for a german date
-            let parts:[Int] = split(separator: ".").map { Int($0) ?? 0}
+            let parts = split(separator: ".").map { Int($0) ?? 0}
             if (parts.count == 3) {
                 day = parts[0]
                 month = parts[1]
