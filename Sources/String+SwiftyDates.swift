@@ -76,10 +76,7 @@ extension String {
                 }
             }
         } else if (contains("-") || contains("/")) {
-            var sep: Character = "-"
-            if (contains("/")) {
-                sep = "/"
-            }
+            let sep: Character = self.contains("/") ? "/" : "-"
             let usWay = contains("/")
             let parts = split(separator: sep).map { Int($0) ?? 0}
             let isoOrder = parts[0] > 12 && parts[1] < 13
