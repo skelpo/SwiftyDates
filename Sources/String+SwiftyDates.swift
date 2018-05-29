@@ -10,10 +10,10 @@ import Foundation
 
 extension String {
     public func swiftyTime() -> TimeInterval {
+        let pm = self.contains("pm")
         var hour: Double = 0
         var minute: Double = 0
         var second: Double = 0
-        let pm: Bool = self.contains("pm")
         var offset: Double = 0
 
         var cleanedTime = replacingOccurrences(of: "am", with: "").replacingOccurrences(of: "pm", with: "").replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "Z", with: "")
@@ -30,12 +30,11 @@ extension String {
                 if (intervalParts.count > 2) {
                     offset = offset + intervalParts[2]
                 }
-            }
-            else {
+            } else {
                 offset = (Double(timeParts[1]) ?? 0) * sign
             }
         }
-        let parts:[Double] = cleanedTime.split(separator: sep).compactMap(Double.init)
+        let parts = cleanedTime.split(separator: sep).compactMap(Double.init)
         if (parts.count > 0) {
             hour = parts[0]
         }
@@ -65,8 +64,7 @@ extension String {
                 day = parts[0]
                 month = parts[1]
                 year = parts.last!
-            }
-            else if (parts.count == 2) {
+            } else if (parts.count == 2) {
                 // checking if the later number is a year (>12 or 4-digits)
                 if (parts.last! > 12) {
                     year = parts.last!
@@ -77,28 +75,25 @@ extension String {
                     day = parts[0]
                 }
             }
-        }
-        else if (contains("-") || contains("/")) {
+        } else if (contains("-") || contains("/")) {
             var sep: Character = "-"
             if (contains("/")) {
                 sep = "/"
             }
             let usWay = contains("/")
-            let parts:[Int] = split(separator: sep).map { Int($0) ?? 0}
-            let isoOrder: Bool = parts[0] > 12 && parts[1] < 13
+            let parts = split(separator: sep).map { Int($0) ?? 0}
+            let isoOrder = parts[0] > 12 && parts[1] < 13
             if (parts.count == 3) {
-                let reverseIsoOrder: Bool = !usWay && parts[2] > 12 && parts[1] < 13
+                let reverseIsoOrder = !usWay && parts[2] > 12 && parts[1] < 13
                 if (isoOrder) {
                     year = parts[0]
                     month = parts[1]
                     day = parts[2]
-                }
-                else if (reverseIsoOrder) {
+                } else if (reverseIsoOrder) {
                     year = parts[2]
                     month = parts[1]
                     day = parts[0]
-                }
-                else {
+                } else {
                     if (usWay) {
                         day = parts[1]
                         month = parts[0]
@@ -109,24 +104,20 @@ extension String {
                     }
                     year = parts.last!
                 }
-            }
-            else if (parts.count == 2) {
+            } else if (parts.count == 2) {
                 if (isoOrder) {
                     year = parts[0]
                     month = parts[1]
-                }
-                else {
+                } else {
                     // checking if the later number is a year (>12 or 4-digits)
                     if (parts.last! > 12) {
                         year = parts.last!
                         month = parts[0]
-                    }
-                    else {
+                    } else {
                         if (usWay) {
                             day = parts.last!
                             month = parts[0]
-                        }
-                        else {
+                        } else {
                             month = parts.last!
                             day = parts[0]
                         }
@@ -134,13 +125,11 @@ extension String {
                 }
                 
             }
-        }
-        else {
+        } else {
             let intValue = Int(self) ?? 0
             if (self.count == 4 || intValue > 12) {
                 year = intValue
-            }
-            else {
+            } else {
                 month = intValue
             }
         }
@@ -156,19 +145,17 @@ extension String {
         return components.date!
     }
     public func swiftyDateTime(calendar: Calendar = Calendar.current, baseDate: Date = Date()) -> Date? {
+        if (self == "") { return nil }
+        
         var time: TimeInterval = 0
         var date: Date?
-        
-        if (self == "") {
-            return nil
-        }
         
         // cleaning
         let cleanString = replacingOccurrences(of: " am", with: "am").replacingOccurrences(of: " pm", with: "pm")
         
         // check for iso 8601 (yyyy-MM-ddTHH:mm:ss.SSZ)
         if (cleanString.contains("T")) {
-            let parts:[String] = split(separator: "T").map { String($0)}
+            let parts:[String] = split(separator: "T").map(String.init)
             date = parts[0].swiftyDate()
             time = parts[1].swiftyTime()
         }
@@ -176,16 +163,13 @@ extension String {
             if let pos = index(of: " ") {
                 date = String(self[..<pos]).swiftyDate()
                 time = String(self[pos...]).swiftyTime()
-            }
-            else {
+            } else {
                 date = swiftyDate()
             }
-        }
-        else if (cleanString.contains(":") || cleanString.contains("pm") || cleanString.contains("am")) { // if we have a ":" it is most likely a time
+        } else if (cleanString.contains(":") || cleanString.contains("pm") || cleanString.contains("am")) { // if we have a ":" it is most likely a time
             date = calendar.date(from: calendar.dateComponents([.year, .month, .day], from: baseDate))!
             time = swiftyTime()
-        }
-        else {
+        } else {
             date = swiftyDate()
         }
         if (date == nil) {
