@@ -10,7 +10,6 @@ import Foundation
 
 extension String {
     public func swiftyTime() -> TimeInterval {
-        let pm = self.contains("pm")
         var hour: Double = 0
         var minute: Double = 0
         var second: Double = 0
@@ -22,7 +21,7 @@ extension String {
         if (self.contains("-") || self.contains("+")) {
             let sign: Double = self.contains("-") ? -1 : 1
             
-            let timeParts:[String] = split(separator: sign == 1 ? "+" : "-").map(String.init)
+            let timeParts = split(separator: sign == 1 ? "+" : "-").map(String.init)
             cleanedTime = timeParts[0]
             if (timeParts[1].contains(":")) {
                 let intervalParts = timeParts[1].split(separator: ":").compactMap(Double.init)
@@ -44,7 +43,7 @@ extension String {
         if (parts.count > 2) {
             second = parts[2]
         }
-        if (pm) {
+        if (self.contains("pm")) {
             hour = hour + 12
         }
         return Double((hour * 3600) + (minute * 60) + second - offset)
