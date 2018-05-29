@@ -16,7 +16,7 @@ extension String {
         var second: Double = 0
         var offset: Double = 0
 
-        var cleanedTime = replacingOccurrences(of: "am", with: "").replacingOccurrences(of: "pm", with: "").replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "Z", with: "")
+        var cleanedTime = self.replacingOccurrences(of: "[a-zA-Z]", with: "", options: .regularExpression)
         let sep: Character = self.contains(".") && !self.contains(":") ? "." : ":"
 
         if (self.contains("-") || self.contains("+")) {
