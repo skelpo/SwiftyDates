@@ -56,6 +56,7 @@ extension String {
         var day: Int?
         var month: Int?
         var year: Int?
+        
         // check for german dates ((d)d.(m)m.(yy)yy) or ((m)m.(yy)yy) or ((d)d.(m)m)
         if (contains(".")) { // most obvious sign for a german date
             let parts = split(separator: ".").map { Int($0) ?? 0}
@@ -76,8 +77,8 @@ extension String {
             }
         } else if (contains("-") || contains("/")) {
             let sep: Character = self.contains("/") ? "/" : "-"
-            let usWay = contains("/")
-            let parts = split(separator: sep).map { Int($0) ?? 0}
+            let usWay = sep == "/"
+            let parts = split(separator: sep).map { Int($0) ?? 0 }
             let isoOrder = parts[0] > 12 && parts[1] < 13
             if (parts.count == 3) {
                 let reverseIsoOrder = !usWay && parts[2] > 12 && parts[1] < 13
@@ -134,11 +135,11 @@ extension String {
         if (year == nil) {
             year = calendar.component(.year, from: date)
         }
-        if (year! < 100 && year! < 50) {
+        if (year! < 50) {
             year = 2000 + year!
         }
         let components = DateComponents(calendar: calendar, year: year, month: month, day: day)
-        return components.date!
+        return components.date
     }
     public func swiftyDateTime(calendar: Calendar = Calendar.current, baseDate: Date = Date()) -> Date? {
         if (self == "") { return nil }
@@ -154,8 +155,7 @@ extension String {
             let parts:[String] = split(separator: "T").map(String.init)
             date = parts[0].swiftyDate()
             time = parts[1].swiftyTime()
-        }
-        else if (cleanString.contains(" ") && (cleanString.contains(":") || cleanString.contains("am") || cleanString.contains("pm")) && (cleanString.contains("/") || cleanString.contains("-") || cleanString.contains("."))) {
+        } else if (cleanString.contains(" ") && (cleanString.contains(":") || cleanString.contains("am") || cleanString.contains("pm")) && (cleanString.contains("/") || cleanString.contains("-") || cleanString.contains("."))) {
             if let pos = index(of: " ") {
                 date = String(self[..<pos]).swiftyDate()
                 time = String(self[pos...]).swiftyTime()
@@ -168,9 +168,7 @@ extension String {
         } else {
             date = swiftyDate()
         }
-        if (date == nil) {
-            return nil
-        }
-        return date! + time
+
+        return date == nil ? nil : date! + time
     }
 }
