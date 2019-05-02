@@ -50,6 +50,10 @@ extension String {
     }
     
     public func swiftyDate(calendar:Calendar = Calendar.current) -> Date? {
+        if let timestamp = TimeInterval(self) {
+            return Date(timeIntervalSince1970: timestamp)
+        }
+
         // is this even a string we can work with?
         if (self.count < 1) { return nil }
         
