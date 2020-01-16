@@ -15,9 +15,8 @@ extension String {
         var second: Double = 0
         var offset: Double = 0
 
-        var cleanedTime = self.replacingOccurrences(of: "[a-zA-Z]", with: "", options: .regularExpression)
-        let sep: Character = self.contains(".") && !self.contains(":") ? "." : ":"
-
+        var cleanedTime = self.replacingOccurrences(of: "[a-zA-Z]", with: "", options: .regularExpression).replacingOccurrences(of: " ", with: "")
+        let sep: Character = (self.contains(".") && !self.contains(":")) ? "." : ":"
         if (self.contains("-") || self.contains("+")) {
             let sign: Double = self.contains("-") ? -1 : 1
             
@@ -50,10 +49,6 @@ extension String {
     }
     
     public func swiftyDate(calendar:Calendar = Calendar.current) -> Date? {
-        if let timestamp = TimeInterval(self) {
-            return Date(timeIntervalSince1970: timestamp)
-        }
-
         // is this even a string we can work with?
         if (self.count < 1) { return nil }
         
@@ -128,6 +123,7 @@ extension String {
             }
         } else {
             let intValue = Int(self) ?? 0
+            print("int value is: ", intValue)
             if (self.count == 4 || intValue > 12) {
                 year = intValue
             } else {
@@ -142,6 +138,13 @@ extension String {
         if (year! < 50) {
             year = 2000 + year!
         }
+        
+        if year! > 5000 {
+            if let timestamp = TimeInterval(self) {
+                return Date(timeIntervalSince1970: timestamp)
+            }
+        }
+        
         let components = DateComponents(calendar: calendar, year: year, month: month, day: day)
         return components.date
     }
@@ -163,10 +166,12 @@ extension String {
             if let pos = index(of: " ") {
                 date = String(self[..<pos]).swiftyDate()
                 time = String(self[pos...]).swiftyTime()
+                print("time: ", time, self)
             } else {
                 date = swiftyDate()
             }
         } else if (cleanString.contains(":") || cleanString.contains("pm") || cleanString.contains("am")) { // if we have a ":" it is most likely a time
+            
             date = calendar.date(from: calendar.dateComponents([.year, .month, .day], from: baseDate))!
             time = swiftyTime()
         } else {

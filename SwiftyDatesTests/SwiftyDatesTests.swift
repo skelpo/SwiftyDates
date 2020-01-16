@@ -31,6 +31,9 @@ class SwiftyDatesTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
+        
+        let currentYear = Calendar.current.component(.year, from: Date())
+        
         iso8601TestCases.append(TestCase("2018-03-08", "03/08/2018 00:00:00"))
         iso8601TestCases.append(TestCase("2018-03-08T15:49:46+00:00", "03/08/2018 15:49:46"))
         iso8601TestCases.append(TestCase("2018-03-08T15:49:46Z", "03/08/2018 15:49:46"))
@@ -49,19 +52,20 @@ class SwiftyDatesTests: XCTestCase {
         iso8601TestCases.append(TestCase("2001-02-03T04:05:06-06:30","02/03/2001 10:35:06"))
         iso8601TestCases.append(TestCase("2001-02-03T04:05:06.007+06:30","02/02/2001 21:35:06"))
         iso8601TestCases.append(TestCase("2001-02-03T04:05:06.007-06:30","02/03/2001 10:35:06"))
+        iso8601TestCases.append(TestCase("2020-01-16T08:34:00Z", "01/16/2020 08:34:00"))
         
         // DE (German) dates
         dateTestCases.append(TestCase("10.12.2017", "12/10/2017 00:00:00"))
         dateTestCases.append(TestCase("10.12.17", "12/10/2017 00:00:00"))
-        dateTestCases.append(TestCase("10.12", "12/10/2018 00:00:00"))
+        dateTestCases.append(TestCase("10.12", "12/10/\(currentYear) 00:00:00"))
         dateTestCases.append(TestCase("12.2017", "12/01/2017 00:00:00")) // uncommon but we still support it
         // EN (GB etc.)
         dateTestCases.append(TestCase("10-12-2017", "12/10/2017 00:00:00"))
         dateTestCases.append(TestCase("10-12-17", "12/10/2017 00:00:00"))
-        dateTestCases.append(TestCase("10-12", "12/10/2018 00:00:00"))
+        dateTestCases.append(TestCase("10-12", "12/10/\(currentYear) 00:00:00"))
         dateTestCases.append(TestCase("12-2017", "12/01/2017 00:00:00"))
         // US
-        dateTestCases.append(TestCase("12/10", "12/10/2018 00:00:00"))
+        dateTestCases.append(TestCase("12/10", "12/10/\(currentYear) 00:00:00"))
         dateTestCases.append(TestCase("12/2017", "12/01/2017 00:00:00"))
         dateTestCases.append(TestCase("12/10/2017", "12/10/2017 00:00:00"))
         dateTestCases.append(TestCase("12/10/17", "12/10/2017 00:00:00"))
@@ -156,7 +160,9 @@ class SwiftyDatesTests: XCTestCase {
         
         
         for tc in timeTestCases {
+            //print("Parsing: ", tc.input, tc.output)
             let date:Date? = tc.input.swiftyDateTime(calendar: Calendar.current, baseDate: testDate)
+            //print("we got: ",dateFormatter.string(from: date!))
             if (date == nil) {
                 XCTAssertNil(tc.output)
             }
