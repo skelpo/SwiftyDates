@@ -163,8 +163,14 @@ extension String {
         let cleanString = replacingOccurrences(of: " am", with: "am").replacingOccurrences(of: " pm", with: "pm")
 
         // check for iso 8601 (yyyy-MM-ddTHH:mm:ss.SSZ)
-        if cleanString.contains("T") {
-            let parts: [String] = split(separator: "T").map(String.init)
+        var isIso8601 = false
+        let parts: [String] = split(separator: "T").map(String.init)
+        
+        if cleanString.contains("T"), parts.count == 2 {
+            isIso8601 = true
+        }
+        
+        if isIso8601 {
             date = parts[0].swiftyDate(calendar: calendar)
             time = parts[1].swiftyTime()
         } else if cleanString.contains(" ") && (cleanString.contains(":") || cleanString.contains("am") || cleanString.contains("pm")) && (cleanString.contains("/") || cleanString.contains("-") || cleanString.contains(".")) {

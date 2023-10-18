@@ -53,6 +53,7 @@ class SwiftyDatesTests: XCTestCase {
         self.iso8601TestCases.append(TestCase("2001-02-03T04:05:06.007+06:30", "02/02/2001 21:35:06"))
         self.iso8601TestCases.append(TestCase("2001-02-03T04:05:06.007-06:30", "02/03/2001 10:35:06"))
         self.iso8601TestCases.append(TestCase("2020-01-16T08:34:00Z", "01/16/2020 08:34:00"))
+        self.iso8601TestCases.append(TestCase("Tue, 17 Oct 2023 21:46:34 -0400", "10/17/2023 17:46:34"))
 
         // Text dates
         self.datetimeTestCases.append(TestCase("Fri, 15 Jan 2021 13:22:00 -0500", "01/15/2021 08:22:00"))
