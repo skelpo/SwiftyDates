@@ -173,7 +173,8 @@ extension String {
         if isIso8601 {
             date = parts[0].swiftyDate(calendar: calendar)
             time = parts[1].swiftyTime()
-        } else if cleanString.contains(" ") && (cleanString.contains(":") || cleanString.contains("am") || cleanString.contains("pm")) && (cleanString.contains("/") || cleanString.contains("-") || cleanString.contains(".")) {
+        } else if cleanString.contains(" ") && (cleanString.contains(":") || cleanString.contains("am") || cleanString.contains("pm")) && (cleanString.contains("/") || cleanString.contains("-") || cleanString.contains("+") || cleanString.contains(".")) {
+        
             if cleanString.split(separator: " ").count > 1 {
                 // we likely have Fri, 15 Jan 2021 13:22:00 -0500 date
                 var cleanString_ = cleanString.lowercased()
